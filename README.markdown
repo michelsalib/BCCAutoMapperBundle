@@ -196,6 +196,7 @@ Note that if there are private members, it will try to use getter and setter to 
 ### Map to a constant
 
 You can map a specific member to a constant:
+
 ``` php
 <?php
 
