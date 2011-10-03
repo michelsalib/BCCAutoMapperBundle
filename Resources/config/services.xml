@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="bcc_auto_mapper.mapper.class">BCC\AutoMapperBundle\Mapper\Mapper</parameter>
+    </parameters>
+
+    <services>
+        <service id="bcc_auto_mapper.mapper" class="%bcc_auto_mapper.mapper.class%" />
+    </services>
+</container>
