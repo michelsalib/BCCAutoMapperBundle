@@ -2,11 +2,6 @@
 
 Inspired by http://github.com/AutoMapper/AutoMapper, this Bundle provides a object to object mapper.
 
-## Features:
-
-- a `bcc:trans:update` command that extract all your missing i18n message from your twig templates and saves into yaml, xliff, php or pot translation files.
-- a twig extension that translates dates and contries
-
 ## Installation and configuration:
 
 ### Get the bundle
