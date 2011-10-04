@@ -6,11 +6,11 @@ use Symfony\Component\Form\FieldAccessor\PropertyPath;
 use Symfony\Component\Form\Exception\FormException;
 
 /**
- * ClosureFieldAccessor access a member value using a closure.
+ * Closure access a member value using a closure.
  *
  * @author Michel Salib <michelsalib@hotmail.com>
  */
-class ClosureFieldAccessor implements FieldAccessorInterface
+class Closure implements FieldAccessorInterface
 {
 
     /**

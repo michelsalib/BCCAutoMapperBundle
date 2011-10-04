@@ -142,13 +142,13 @@ If you need some extra computation when mapping a member, you can provide a clos
 ``` php
 <?php
 
-use BCC\AutoMapperBundle\Mapper\FieldAccessor\ClosureFieldAccessor;
+use BCC\AutoMapperBundle\Mapper\FieldAccessor\Closure;
 
 // get mapper
 $mapper = $container->get('bcc_auto_mapper.mapper');
 // create default map and override members
 $mapper->createMap('My\SourcePost', 'My\DestinationPost')
-       ->forMember('title', new ClosureFieldAccessor(function(SourcePost $source){
+       ->forMember('title', new Closure(function(SourcePost $source){
            return \strtoupper($source->name);
        }));
 
@@ -169,8 +169,6 @@ You can map the author->name member this way:
 
 ``` php
 <?php
-
-use BCC\AutoMapperBundle\Mapper\FieldAccessor\ClosureFieldAccessor;
 
 // get mapper
 $mapper = $container->get('bcc_auto_mapper.mapper');
@@ -200,13 +198,13 @@ You can map a specific member to a constant:
 ``` php
 <?php
 
-use BCC\AutoMapperBundle\Mapper\FieldAccessor\ConstantFieldAccessor;
+use BCC\AutoMapperBundle\Mapper\FieldAccessor\Constant;
 
 // get mapper
 $mapper = $container->get('bcc_auto_mapper.mapper');
 // create default map and override members
 $mapper->createMap('My\SourcePost', 'My\DestinationPost')
-       ->forMember('title', new ConstantFieldAccessor('Constant title'));
+       ->forMember('title', new Constant('Constant title'));
 
 // create objects
 $source = new SourcePost();
@@ -217,6 +215,32 @@ $destination = new DestinationPost();
 $mapper->map($source, $destination);
 
 echo destination->title; // outputs 'Constant title'
+```
+
+### Apply a filter
+
+You can apply a filter to a mapped member. Right now there is just a `IfNull` filter that applies a default value if the field could not be mapped or is mapped on a null value:
+
+``` php
+<?php
+
+use BCC\AutoMapperBundle\Mapper\FieldAccessor\IfNull;
+
+// get mapper
+$mapper = $container->get('bcc_auto_mapper.mapper');
+// create default map and override members
+$mapper->createMap('My\SourcePost', 'My\DestinationPost')
+       ->filter('title', new IfNull('Default title'));
+
+// create objects
+$source = new SourcePost();
+$source->name = 'AutoMapper Bundle';
+$destination = new DestinationPost();
+
+// map
+$mapper->map($source, $destination);
+
+echo destination->title; // outputs 'Default title'
 ```
 
 ## Register a map

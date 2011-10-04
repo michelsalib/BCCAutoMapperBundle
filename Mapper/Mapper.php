@@ -57,11 +57,19 @@ class Mapper
      */
     public function map($source, $destination)
     {
-        $fieldAccessors = $this->getMap(\get_class($source), \get_class($destination))->getFieldAccessors();
+        $map = $this->getMap(\get_class($source), \get_class($destination));
+        $fieldAccessors = $map->getFieldAccessors();
+        $fieldFilters = $map->getFieldFilters();
         
         foreach ($fieldAccessors as $path => $fieldAccessor) {
+            $value = $fieldAccessor->getValue($source);
+            
+            if (isset($fieldFilters[$path])) {
+                $value = $fieldFilters[$path]->filter($value);
+            }
+            
             $propertyPath = new PropertyPath($path);
-            $propertyPath->setValue($destination, $fieldAccessor->getValue($source));
+            $propertyPath->setValue($destination, $value);
         }
         
         return $destination;

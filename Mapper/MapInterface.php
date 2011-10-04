@@ -11,9 +11,14 @@ interface MapInterface
 {
 
     /**
-     * @return array<Utils/FieldAccessorsInterface> An array of field accessors
+     * @return array<FieldAccessor/FieldAccessorInterface> An array of field accessors
      */
     public function getFieldAccessors();
+    
+    /**
+     * @return array<FieldFilter/FieldFilterInterface> An array of field filters
+     */
+    public function getFieldFilters();
 
     /**
      * @return string The source type

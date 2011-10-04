@@ -3,8 +3,9 @@
 namespace BCC\AutoMapperBundle\Mapper;
 
 use Symfony\Component\Form\Util\PropertyPath;
-use BCC\AutoMapperBundle\Mapper\FieldAccessor\SimpleFieldAccessor;
+use BCC\AutoMapperBundle\Mapper\FieldAccessor\Simple;
 use BCC\AutoMapperBundle\Mapper\FieldAccessor\FieldAccessorInterface;
+use BCC\AutoMapperBundle\Mapper\FieldFilter\FieldFilterInterface;
 
 /**
  * AbstractMap returns a value for a member given a property path
@@ -15,6 +16,7 @@ abstract class AbstractMap implements MapInterface
 {
     
     protected $fieldAccessors = array();
+    protected $fieldFilters = array();
 
     /**
      * Associate a member to another member given their property pathes.
@@ -25,7 +27,7 @@ abstract class AbstractMap implements MapInterface
      */
     public function route($destinationMember, $sourceMember)
     {
-        $this->fieldAccessors[$destinationMember] = new SimpleFieldAccessor($sourceMember);
+        $this->fieldAccessors[$destinationMember] = new Simple($sourceMember);
         
         return $this;
     }
@@ -43,13 +45,18 @@ abstract class AbstractMap implements MapInterface
         
         return $this;
     }
-
+    
     /**
-     * {@inheritDoc}
+     * Applies a filter to the field.
+     * 
+     * @param string $destinationMember
+     * @param FieldFilterInterface $fieldFilter 
      */
-    public function getFieldAccessors()
+    public function filter($destinationMember, FieldFilterInterface $fieldFilter)
     {
-        return $this->fieldAccessors;
+        $this->fieldFilters[$destinationMember] = $fieldFilter;
+        
+        return $this;
     }
 
     /**
@@ -62,9 +69,24 @@ abstract class AbstractMap implements MapInterface
         $reflectionClass = new \ReflectionClass($this->getDestinationType());
         
         foreach ($reflectionClass->getProperties() as $property) {
-            $this->fieldAccessors[$property->name] = new SimpleFieldAccessor($property->name);
+            $this->fieldAccessors[$property->name] = new Simple($property->name);
         }
         
         return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFieldAccessors()
+    {
+        return $this->fieldAccessors;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function getFieldFilters() {
+        return $this->fieldFilters;
     }
 }

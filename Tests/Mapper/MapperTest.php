@@ -6,8 +6,9 @@ use BCC\AutoMapperBundle\Tests\Fixtures\DestinationPost;
 use BCC\AutoMapperBundle\Tests\Fixtures\SourcePost;
 use BCC\AutoMapperBundle\Tests\Fixtures\SourceAuthor;
 use BCC\AutoMapperBundle\Mapper\Mapper;
-use BCC\AutoMapperBundle\Mapper\FieldAccessor\ClosureFieldAccessor;
+use BCC\AutoMapperBundle\Mapper\FieldAccessor\Closure;
 use BCC\AutoMapperBundle\Tests\Fixtures\PostMap;
+use BCC\AutoMapperBundle\Mapper\FieldFilter\IfNull;
 
 /**
  * @author Michel Salib <michelsalib@hotmail.com>
@@ -72,7 +73,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
         $destination = new DestinationPost();
         $mapper = new Mapper();
         $mapper->createMap('BCC\AutoMapperBundle\Tests\Fixtures\SourcePost', 'BCC\AutoMapperBundle\Tests\Fixtures\DestinationPost')
-               ->forMember('author', new ClosureFieldAccessor(function(SourcePost $s){
+               ->forMember('author', new Closure(function(SourcePost $s){
                    return $s->author->name;
                }));
 
@@ -98,5 +99,21 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
         // ASSERT
         $this->assertEquals('Michel', $destination->title);
         $this->assertEquals('Symfony2 developer', $destination->description);
+    }
+    
+    public function testMappingPolicy() {
+        // ARRANGE
+        $source = new SourcePost();
+        $source->name = 'Michel';
+        $destination = new DestinationPost();
+        $mapper = new Mapper();
+        $mapper->createMap('BCC\AutoMapperBundle\Tests\Fixtures\SourcePost', 'BCC\AutoMapperBundle\Tests\Fixtures\DestinationPost')
+               ->filter('title', new IfNull(''));
+
+        // ACT
+        $mapper->map($source, $destination);
+
+        // ASSERT
+        $this->assertEquals('', $destination->title);
     }
 }

@@ -6,11 +6,11 @@ use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\Form\Exception\FormException;
 
 /**
- * SimpleFieldAccessor returns a value for a member given a property path.
+ * Simple returns a value for a member given a property path.
  *
  * @author Michel Salib <michelsalib@hotmail.com>
  */
-class SimpleFieldAccessor implements FieldAccessorInterface
+class Simple implements FieldAccessorInterface
 {
 
     private $sourcePropertyPath;

@@ -6,11 +6,11 @@ use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\Form\Exception\FormException;
 
 /**
- * ConstantFieldAccessor returns a constant as a value for a member.
+ * Constant returns a constant as a value for a member.
  *
  * @author Michel Salib <michelsalib@hotmail.com>
  */
-class ConstantFieldAccessor implements FieldAccessorInterface
+class Constant implements FieldAccessorInterface
 {
 
     /**
