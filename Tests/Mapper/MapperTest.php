@@ -116,4 +116,18 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
         // ASSERT
         $this->assertEquals('', $destination->title);
     }
+    
+    public function testMappingArray() {
+        // ARRANGE
+        $source = array('title' => 'Michel');
+        $destination = new DestinationPost();
+        $mapper = new Mapper();
+        $mapper->createMap('array', 'BCC\AutoMapperBundle\Tests\Fixtures\DestinationPost');
+
+        // ACT
+        $mapper->map($source, $destination);
+
+        // ASSERT
+        $this->assertEquals('Michel', $destination->title);
+    }
 }

@@ -40,12 +40,20 @@ class Mapper
      * Obtains a registered map for the given source and destination types.
      * 
      * @param string $sourceType
-     * @param string $destinationMap
+     * @param string $destinationType
      * @return Map 
      */
-    public function getMap($sourceType, $destinationMap)
+    public function getMap($sourceType, $destinationType)
     {
-        return $this->maps[$sourceType][$destinationMap];
+        if(!isset($this->maps[$sourceType])) {
+            throw new \LogicException('There is no map that support this source type: '.$sourceType);
+        }
+        
+        if(!isset($this->maps[$sourceType][$destinationType])) {
+            throw new \LogicException('There is no map that support this destination type: '.$destinationType);
+        }
+        
+        return $this->maps[$sourceType][$destinationType];
     }
 
     /**
@@ -57,7 +65,9 @@ class Mapper
      */
     public function map($source, $destination)
     {
-        $map = $this->getMap(\get_class($source), \get_class($destination));
+        $map = $this->getMap(
+            \is_array($source) ? 'array' : \get_class($source),
+            \is_array($destination) ? 'array' : \get_class($destination));
         $fieldAccessors = $map->getFieldAccessors();
         $fieldFilters = $map->getFieldFilters();
         
