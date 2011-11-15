@@ -295,3 +295,27 @@ $mapper->map($source, $destination);
 
 echo destination->title; // outputs 'AutoMapper Bundle'
 ```
+
+## Ignore a field
+
+You can ignore a destination field.
+
+``` php
+<?php
+
+// get mapper
+$mapper = $container->get('bcc_auto_mapper.mapper');
+// create default map
+$mapper->createMap('My\SourcePost', 'My\DestinationPost')
+    ->ignoreMember('description');
+
+// create objects
+$source = new SourcePost();
+$source->description = 'Symfony2 developer';
+$destination = new DestinationPost();
+
+// map
+$mapper->map($source, $destination);
+
+var_dump(destination->description); // ignored, will be null
+```

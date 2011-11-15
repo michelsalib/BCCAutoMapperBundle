@@ -5,6 +5,7 @@ namespace BCC\AutoMapperBundle\Tests\Mapper;
 use BCC\AutoMapperBundle\Tests\Fixtures\DestinationPost;
 use BCC\AutoMapperBundle\Tests\Fixtures\SourcePost;
 use BCC\AutoMapperBundle\Tests\Fixtures\SourceAuthor;
+use BCC\AutoMapperBundle\Tests\Fixtures\PrivateDestinationPost;
 use BCC\AutoMapperBundle\Mapper\Mapper;
 use BCC\AutoMapperBundle\Mapper\FieldAccessor\Closure;
 use BCC\AutoMapperBundle\Tests\Fixtures\PostMap;
@@ -130,4 +131,24 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
         // ASSERT
         $this->assertEquals('Michel', $destination->title);
     }
+
+	public function testIgnoreField() {
+		// ARRANGE
+        $source = new SourcePost();
+        $source->description = 'Symfony2 developer';
+        $destination = new PrivateDestinationPost();
+        $mapper = new Mapper();
+        $mapper->createMap('BCC\AutoMapperBundle\Tests\Fixtures\SourcePost', 'BCC\AutoMapperBundle\Tests\Fixtures\PrivateDestinationPost')
+			->ignoreMember('id');
+
+        // ACT
+        try {
+            $mapper->map($source, $destination);
+        } catch (\Exception $e) {
+            $this->fail('should not catch an exception - ' . $e->getMessage());
+        }
+
+        // ASSERT
+		$this->assertNull($destination->getId());
+	}
 }
