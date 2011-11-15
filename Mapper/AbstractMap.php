@@ -75,6 +75,16 @@ abstract class AbstractMap implements MapInterface
         return $this;
     }
 
+	/**
+	 * Ignore the destination field.
+	 *
+	 * @param string $destinationMember
+	 */
+	public function ignoreMember($destinationMember)
+	{
+		unset($this->fieldAccessors[$destinationMember]);
+	}
+
     /**
      * {@inheritDoc}
      */
