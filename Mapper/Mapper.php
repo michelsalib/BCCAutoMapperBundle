@@ -79,7 +79,18 @@ class Mapper
             }
             
             $propertyPath = new PropertyPath($path);
-            $propertyPath->setValue($destination, $value);
+
+            if ($map->getOverwriteIfSet())
+            {
+                $propertyPath->setValue($destination, $value);
+            }
+            else
+            {
+                if ($propertyPath->getValue($destination) == null)
+                {
+                    $propertyPath->setValue($destination, $value);
+                }
+            }
         }
         
         return $destination;

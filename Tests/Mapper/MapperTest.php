@@ -132,14 +132,14 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('Michel', $destination->title);
     }
 
-	public function testIgnoreField() {
-		// ARRANGE
+    public function testIgnoreField() {
+        // ARRANGE
         $source = new SourcePost();
         $source->description = 'Symfony2 developer';
         $destination = new PrivateDestinationPost();
         $mapper = new Mapper();
         $mapper->createMap('BCC\AutoMapperBundle\Tests\Fixtures\SourcePost', 'BCC\AutoMapperBundle\Tests\Fixtures\PrivateDestinationPost')
-			->ignoreMember('id');
+            ->ignoreMember('id');
 
         // ACT
         try {
@@ -149,6 +149,41 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
         }
 
         // ASSERT
-		$this->assertNull($destination->getId());
-	}
+        $this->assertNull($destination->getId());
+    }
+
+    public function testOverwrittenIfSet() {
+        $source = new SourcePost();
+        $source->description = 'Symfony2 developer';
+        $destination = new DestinationPost();
+        $destination->description = 'Foo bar';
+        $mapper = new Mapper();
+        $mapper->createMap('BCC\AutoMapperBundle\Tests\Fixtures\SourcePost', 'BCC\AutoMapperBundle\Tests\Fixtures\DestinationPost');
+
+        try {
+            $mapper->map($source, $destination);
+        } catch (\Exception $e) {
+            $this->fail('should not catch an exception - ' . $e->getMessage());
+        }
+
+        $this->assertEquals('Symfony2 developer', $destination->description);
+    }
+
+    public function testNotOverwrittenIfSet() {
+        $source = new SourcePost();
+        $source->description = 'Symfony2 developer';
+        $destination = new DestinationPost();
+        $destination->description = 'Foo bar';
+        $mapper = new Mapper();
+        $mapper->createMap('BCC\AutoMapperBundle\Tests\Fixtures\SourcePost', 'BCC\AutoMapperBundle\Tests\Fixtures\DestinationPost')
+            ->setOverwriteIfSet(false);
+
+        try {
+            $mapper->map($source, $destination);
+        } catch (\Exception $e) {
+            $this->fail('should not catch an exception - ' . $e->getMessage());
+        }
+
+        $this->assertEquals('Foo bar', $destination->description);
+    }
 }
