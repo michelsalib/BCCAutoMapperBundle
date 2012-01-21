@@ -17,6 +17,7 @@ abstract class AbstractMap implements MapInterface
     
     protected $fieldAccessors = array();
     protected $fieldFilters = array();
+    protected $overwriteIfSet = true;
 
     /**
      * Associate a member to another member given their property pathes.
@@ -60,6 +61,27 @@ abstract class AbstractMap implements MapInterface
     }
 
     /**
+     * Sets whether to overwrite the destination value if it is already set.
+     *
+     * @param $value
+     * @return AbstractMap
+     */
+    public function setOverwriteIfSet($value)
+    {
+        $this->overwriteIfSet = (bool) $value;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getOverwriteIfSet()
+    {
+        return $this->overwriteIfSet;
+    }
+
+    /**
      * Builds the default map using property names.
      * 
      * @return AbstractMap 
@@ -75,18 +97,18 @@ abstract class AbstractMap implements MapInterface
         return $this;
     }
 
-	/**
-	 * Ignore the destination field.
-	 *
-	 * @param string $destinationMember
-	 * @return AbstractMap
-	 */
-	public function ignoreMember($destinationMember)
-	{
-		unset($this->fieldAccessors[$destinationMember]);
+    /**
+     * Ignore the destination field.
+     *
+     * @param string $destinationMember
+     * @return AbstractMap
+     */
+    public function ignoreMember($destinationMember)
+    {
+        unset($this->fieldAccessors[$destinationMember]);
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * {@inheritDoc}
