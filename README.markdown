@@ -2,6 +2,8 @@
 
 Inspired by http://github.com/AutoMapper/AutoMapper, this Bundle provides a object to object mapper.
 
+[![Build Status](https://secure.travis-ci.org/michelsalib/BCCAutoMapperBundle.png?branch=master)](http://travis-ci.org/michelsalib/BCCAutoMapperBundle)
+
 ## Installation and configuration:
 
 ### Get the bundle
