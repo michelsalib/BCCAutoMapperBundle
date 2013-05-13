@@ -2,7 +2,7 @@
 
 namespace BCC\AutoMapperBundle\Mapper;
 
-use Symfony\Component\Form\Util\PropertyPath;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * Mapper maps objects and manages maps.
@@ -41,7 +41,7 @@ class Mapper
      * 
      * @param string $sourceType
      * @param string $destinationType
-     * @return Map 
+     * @return MapInterface
      */
     public function getMap($sourceType, $destinationType)
     {
@@ -77,18 +77,18 @@ class Mapper
             if (isset($fieldFilters[$path])) {
                 $value = $fieldFilters[$path]->filter($value);
             }
-            
-            $propertyPath = new PropertyPath($path);
+
+            $propertyAccessor = PropertyAccess::getPropertyAccessor();
 
             if ($map->getOverwriteIfSet())
             {
-                $propertyPath->setValue($destination, $value);
+                $propertyAccessor->setValue($destination, $path, $value);
             }
             else
             {
-                if ($propertyPath->getValue($destination) == null)
+                if ($propertyAccessor->getValue($destination, $path) == null)
                 {
-                    $propertyPath->setValue($destination, $value);
+                    $propertyAccessor->setValue($destination, $path, $value);
                 }
             }
         }

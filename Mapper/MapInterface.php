@@ -2,6 +2,9 @@
 
 namespace BCC\AutoMapperBundle\Mapper;
 
+use BCC\AutoMapperBundle\Mapper\FieldAccessor\FieldAccessorInterface;
+use BCC\AutoMapperBundle\Mapper\FieldFilter\FieldFilterInterface;
+
 /**
  * MapInterface defines a map interface.
  *
@@ -11,12 +14,12 @@ interface MapInterface
 {
 
     /**
-     * @return array<FieldAccessor/FieldAccessorInterface> An array of field accessors
+     * @return FieldAccessorInterface[] An array of field accessors
      */
     public function getFieldAccessors();
     
     /**
-     * @return array<FieldFilter/FieldFilterInterface> An array of field filters
+     * @return FieldFilterInterface[] An array of field filters
      */
     public function getFieldFilters();
 
