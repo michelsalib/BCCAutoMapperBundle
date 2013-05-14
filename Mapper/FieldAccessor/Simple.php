@@ -2,8 +2,10 @@
 
 namespace BCC\AutoMapperBundle\Mapper\FieldAccessor;
 
-use Symfony\Component\Form\Util\PropertyPath;
-use Symfony\Component\Form\Exception\FormException;
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\PropertyAccess\PropertyPath;
 
 /**
  * Simple returns a value for a member given a property path.
@@ -13,6 +15,9 @@ use Symfony\Component\Form\Exception\FormException;
 class Simple implements FieldAccessorInterface
 {
 
+    /**
+     * @var PropertyPath
+     */
     private $sourcePropertyPath;
 
     /**
@@ -29,9 +34,9 @@ class Simple implements FieldAccessorInterface
     public function getValue($source)
     {
         try {
-            return $this->sourcePropertyPath->getValue($source);
-        } catch (FormException $ex) {
-            // ignore unfound properties
+            return PropertyAccess::getPropertyAccessor()->getValue($source, $this->sourcePropertyPath);
+        } catch (NoSuchPropertyException $ex) {
+            // ignore properties not found
         }
     }
 
