@@ -48,7 +48,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('Michel', $destination->title);
         $this->assertEquals('Symfony2 developer', $destination->description);
     }
-    
+
     public function testInDepthMap() {
         // ARRANGE
         $source = new SourcePost();
@@ -65,7 +65,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
         // ASSERT
         $this->assertEquals('Michel', $destination->author);
     }
-    
+
     public function testClosuredMap() {
         // ARRANGE
         $source = new SourcePost();
@@ -84,7 +84,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
         // ASSERT
         $this->assertEquals('Michel', $destination->author);
     }
-    
+
     public function testMapRegistring(){
         // ARRANGE
         $source = new SourcePost();
@@ -101,7 +101,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('Michel', $destination->title);
         $this->assertEquals('Symfony2 developer', $destination->description);
     }
-    
+
     public function testMappingPolicy() {
         // ARRANGE
         $source = new SourcePost();
@@ -117,10 +117,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
         // ASSERT
         $this->assertEquals('', $destination->title);
     }
-    
-    public function testMappingArray() {
-        $this->markTestIncomplete('Array property path notation changed in Symfony 2.2');
 
+    public function testMappingArray() {
         // ARRANGE
         $source = array('title' => 'Michel');
         $destination = new DestinationPost();
