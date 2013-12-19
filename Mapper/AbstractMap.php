@@ -62,7 +62,7 @@ abstract class AbstractMap implements MapInterface
     }
 
     /**
-     * Sets whether to skip the source value  if it is null.
+     * Sets whether to skip the source value if it is null.
      *
      * @param $value
      * @return AbstractMap
