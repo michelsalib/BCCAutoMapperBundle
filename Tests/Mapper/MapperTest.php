@@ -186,4 +186,22 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals('Foo bar', $destination->description);
     }
+    
+    public function testSkipNull() {
+        $source = new SourcePost();
+        $source->description = null;
+        $destination = new DestinationPost();
+        $destination->description = 'Foo bar';
+        $mapper = new Mapper();
+        $mapper->createMap('BCC\AutoMapperBundle\Tests\Fixtures\SourcePost', 'BCC\AutoMapperBundle\Tests\Fixtures\DestinationPost')
+               ->setSkipNull(true);
+
+        try {
+            $mapper->map($source, $destination);
+        } catch (\Exception $e) {
+            $this->fail('should not catch an exception - ' . $e->getMessage());
+        }
+
+        $this->assertEquals('Foo bar', $destination->description);
+    }    
 }
