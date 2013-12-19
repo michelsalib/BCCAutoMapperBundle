@@ -18,6 +18,7 @@ abstract class AbstractMap implements MapInterface
     protected $fieldAccessors = array();
     protected $fieldFilters = array();
     protected $overwriteIfSet = true;
+    protected $skipNull       = false;
 
     /**
      * Associate a member to another member given their property pathes.
@@ -60,6 +61,27 @@ abstract class AbstractMap implements MapInterface
         return $this;
     }
 
+    /**
+     * Sets whether to skip the source value if it is null.
+     *
+     * @param $value
+     * @return AbstractMap
+     */
+    public function setSkipNull($value)
+    {
+        $this->skipNull = (bool) $value;
+
+        return $this;
+    }
+    
+    /**
+     * @return bool
+     */
+    public function getSkipNull()
+    {
+        return $this->skipNull;
+    }
+    
     /**
      * Sets whether to overwrite the destination value if it is already set.
      *

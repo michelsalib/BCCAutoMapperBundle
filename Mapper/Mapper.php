@@ -77,7 +77,11 @@ class Mapper
             if (isset($fieldFilters[$path])) {
                 $value = $fieldFilters[$path]->filter($value);
             }
-
+            
+            if ($map->getSkipNull() && is_null($value)) {
+                continue;
+            }
+            
             $propertyAccessor = PropertyAccess::getPropertyAccessor();
 
             if ($map->getOverwriteIfSet())
