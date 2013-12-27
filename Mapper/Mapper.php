@@ -107,7 +107,6 @@ class Mapper
 
     private function filterClassname($className)
     {
-
         $result = $className;
 
         //because doctrine2 entity can be passed
