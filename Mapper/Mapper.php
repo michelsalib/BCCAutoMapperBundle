@@ -66,8 +66,9 @@ class Mapper
     public function map($source, $destination)
     {
         $map = $this->getMap(
-            \is_array($source) ? 'array' : \get_class($source),
-            \is_array($destination) ? 'array' : \get_class($destination));
+            $this->guessType($source),
+            $this->guessType($destination)
+        );
         $fieldAccessors = $map->getFieldAccessors();
         $fieldFilters = $map->getFieldFilters();
         
@@ -99,5 +100,23 @@ class Mapper
         
         return $destination;
     }
+    
+    private function guessType($guessable)
+    {
+        return \is_array($guessable) ? 'array' : $this->filterClassName(\get_class($guessable));
+    }
 
+    private function filterClassname($className)
+    {
+        $result = $className;
+
+        //because doctrine2 entity can be passed
+        if ($pos = strpos($className, "Proxies\\__CG__\\") !== false)
+        {
+            //retrieve class namespace
+            $result = mb_substr($className, strlen("Proxies\\__CG__\\"), strlen($className));
+        }
+
+        return $result;
+    }
 }
