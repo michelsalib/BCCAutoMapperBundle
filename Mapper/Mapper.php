@@ -67,7 +67,8 @@ class Mapper
     {
         $map = $this->getMap(
             $this->guessType($source),
-            $this->guessType($destination);
+            $this->guessType($destination)
+        );
         $fieldAccessors = $map->getFieldAccessors();
         $fieldFilters = $map->getFieldFilters();
         
