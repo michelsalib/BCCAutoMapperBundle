@@ -346,3 +346,28 @@ $mapper->map($source, $destination);
 
 var_dump(destination->description); // will be 'Foo bar'
 ```
+
+## Skip null
+
+You can skip a field that is null.
+
+``` php
+<?php
+
+// get mapper
+$mapper = $container->get('bcc_auto_mapper.mapper');
+// create default map
+$mapper->createMap('My\SourcePost', 'My\DestinationPost')
+       ->setSkipNull(true);
+
+// create objects
+$source = new SourcePost();
+$source->description = null;
+$destination = new DestinationPost();
+$destination->description = 'Foo bar';
+
+// map
+$mapper->map($source, $destination);
+
+var_dump(destination->description); // will be 'Foo bar'
+```
