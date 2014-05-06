@@ -2,6 +2,7 @@
     "name": "bcc/auto-mapper-bundle",
     "type": "symfony-bundle",
     "description": "An object to object mapper bundle for Symfony2",
+    "license": "MIT",
     "keywords": ["mapper automapper"],
     "homepage": "http://github.com/michelsalib/BCCAutoMapperBundle",
     "authors": [
