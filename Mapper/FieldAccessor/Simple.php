@@ -34,7 +34,7 @@ class Simple implements FieldAccessorInterface
     public function getValue($source)
     {
         try {
-            return PropertyAccess::getPropertyAccessor()->getValue($source, $this->sourcePropertyPath);
+            return PropertyAccess::createPropertyAccessor()->getValue($source, $this->sourcePropertyPath);
         } catch (NoSuchPropertyException $ex) {
             // ignore properties not found
         }
