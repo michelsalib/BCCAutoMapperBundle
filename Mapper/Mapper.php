@@ -83,7 +83,7 @@ class Mapper
                 continue;
             }
             
-            $propertyAccessor = PropertyAccess::getPropertyAccessor();
+            $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
             if ($map->getOverwriteIfSet())
             {
