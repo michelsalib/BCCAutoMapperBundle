@@ -2,6 +2,11 @@
 
 namespace BCC\AutoMapperBundle\Mapper\FieldFilter;
 
+/**
+ * Filter object value and apply mapping to given className
+ *
+ * @author Jorge Garcia Ramos <jorgegr89@gmail.com>
+ */
 class ObjectMappingFilter extends AbstractMappingFilter
 {
     /**

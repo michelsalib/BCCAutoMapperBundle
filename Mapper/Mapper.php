@@ -14,7 +14,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 class Mapper
 {
 
-    private $maps = [];
+    private $maps = array();
 
     /**
      * Creates and registers a default map given the source and destination types.

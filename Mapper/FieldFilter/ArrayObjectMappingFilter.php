@@ -2,6 +2,11 @@
 
 namespace BCC\AutoMapperBundle\Mapper\FieldFilter;
 
+/**
+ * Filter array object value and map inner items to given className
+ *
+ * @author Jorge Garcia Ramos <jorgegr89@gmail.com>
+ */
 class ArrayObjectMappingFilter extends AbstractMappingFilter
 {
 

@@ -9,7 +9,9 @@ use Symfony\Component\PropertyAccess\PropertyPath;
 /**
  * Simple returns a value for a member given a property path.
  *
- * @author Michel Salib <michelsalib@hotmail.com>
+ * This accessor uses Symfony ExpressionLanguage to extract property value.
+ *
+ * @author Jorge Garcia Ramos <jorgegr89@gmail.com>
  */
 class Expression implements FieldAccessorInterface
 {
@@ -36,7 +38,7 @@ class Expression implements FieldAccessorInterface
         try {
             return $expLanguage->evaluate(
                 'value'.(is_array($source) ? '' : '.').$this->sourcePropertyPath,
-                ['value' => $source]
+                array('value' => $source)
             );
         } catch (\Exception $ex) {
             if (
