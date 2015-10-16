@@ -2,9 +2,8 @@
 
 namespace BCC\AutoMapperBundle\Mapper;
 
-use BCC\AutoMapperBundle\Mapper\FieldAccessor\Simple;
+use BCC\AutoMapperBundle\Mapper\Exception\InvalidClassConstructorException;
 use BCC\AutoMapperBundle\Mapper\FieldFilter\AbstractMappingFilter;
-use Exception\InvalidClassConstructorException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
@@ -15,13 +14,14 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 class Mapper
 {
 
-    private $maps = array();
+    private $maps = [];
 
     /**
      * Creates and registers a default map given the source and destination types.
      *
      * @param string $sourceType
      * @param string $destinationMap
+     *
      * @return DefaultMap
      */
     public function createMap($sourceType, $destinationMap)
@@ -44,15 +44,16 @@ class Mapper
      *
      * @param string $sourceType
      * @param string $destinationType
+     *
      * @return MapInterface
      */
     public function getMap($sourceType, $destinationType)
     {
-        if(!isset($this->maps[$sourceType])) {
+        if (!isset($this->maps[$sourceType])) {
             throw new \LogicException('There is no map that support this source type: '.$sourceType);
         }
 
-        if(!isset($this->maps[$sourceType][$destinationType])) {
+        if (!isset($this->maps[$sourceType][$destinationType])) {
             throw new \LogicException('There is no map that support this destination type: '.$destinationType);
         }
 
@@ -73,8 +74,10 @@ class Mapper
         if (is_string($destination)) {
             $destinationRef = new \ReflectionClass($destination);
 
-            if ($destinationRef->getConstructor() && $destinationRef->getConstructor()->getNumberOfRequiredParameters() > 0) {
-                throw new \BCC\AutoMapperBundle\Exception\InvalidClassConstructorException($destination);
+            if ($destinationRef->getConstructor() && $destinationRef->getConstructor()->getNumberOfRequiredParameters(
+                ) > 0
+            ) {
+                throw new InvalidClassConstructorException($destination);
             }
             $destination = $destinationRef->newInstance();
         }
@@ -103,14 +106,10 @@ class Mapper
 
             $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
-            if ($map->getOverwriteIfSet())
-            {
+            if ($map->getOverwriteIfSet()) {
                 $propertyAccessor->setValue($destination, $path, $value);
-            }
-            else
-            {
-                if ($propertyAccessor->getValue($destination, $path) == null)
-                {
+            } else {
+                if ($propertyAccessor->getValue($destination, $path) == null) {
                     $propertyAccessor->setValue($destination, $path, $value);
                 }
             }
@@ -129,32 +128,11 @@ class Mapper
         $result = $className;
 
         //because doctrine2 entity can be passed
-        if ($pos = strpos($className, "Proxies\\__CG__\\") !== false)
-        {
+        if ($pos = strpos($className, "Proxies\\__CG__\\") !== false) {
             //retrieve class namespace
             $result = mb_substr($className, strlen("Proxies\\__CG__\\"), strlen($className));
         }
 
         return $result;
-    }
-
-    /**
-     * @param $value
-     * @param $fieldAccessor
-     *
-     * @return object
-     * @throws InvalidClassConstructorException
-     */
-    private function applyDeepMapping($value, $fieldAccessor)
-    {
-        if (!is_null($value) && $fieldAccessor instanceof Simple && $fieldAccessor->getMappingClass()) {
-            if (is_array($value)) {
-                $value = $this->map($value, $fieldAccessor->getMappingClass());
-            } elseif (is_object($value)) {
-                $value = $this->map($value, $fieldAccessor->getMappingClass());
-            }
-        }
-
-        return $value;
     }
 }

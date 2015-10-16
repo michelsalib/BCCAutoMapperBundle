@@ -12,7 +12,8 @@
         <whitelist>
             <directory>./</directory>
             <exclude>
-                <directory>./Fixtures</directory>
+                <directory>./Tests</directory>
+                <directory>./Resources</directory>
             </exclude>
         </whitelist>
     </filter>

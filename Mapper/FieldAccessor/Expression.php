@@ -2,8 +2,8 @@
 
 namespace BCC\AutoMapperBundle\Mapper\FieldAccessor;
 
+use BCC\AutoMapperBundle\Mapper\Exception\InvalidSourceProperty;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
 /**
@@ -24,7 +24,7 @@ class Expression implements FieldAccessorInterface
      */
     function __construct($sourcePropertyPath)
     {
-        $this->sourcePropertyPath = new PropertyPath($sourcePropertyPath);
+        $this->sourcePropertyPath = $sourcePropertyPath;
     }
 
     /**
@@ -34,9 +34,19 @@ class Expression implements FieldAccessorInterface
     {
         $expLanguage = new ExpressionLanguage();
         try {
-            return $expLanguage->evaluate($this->sourcePropertyPath, $source);
-        } catch (NoSuchPropertyException $ex) {
-            // ignore properties not found
+            return $expLanguage->evaluate(
+                'value'.(is_array($source) ? '' : '.').$this->sourcePropertyPath,
+                ['value' => $source]
+            );
+        } catch (\Exception $ex) {
+            if (
+                strpos($ex->getMessage(), 'Unable to get a property on a non-object') === false
+            ) {
+                if (preg_match('/Variable ".*" is not valid/', $ex->getMessage())) {
+                    throw new InvalidSourceProperty('Property path "'.$this->sourcePropertyPath.'" is invalid');
+                }
+                throw $ex;
+            }
         }
     }
 
