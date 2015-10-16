@@ -17,7 +17,6 @@ use BCC\AutoMapperBundle\Mapper\Mapper;
 use BCC\AutoMapperBundle\Mapper\FieldAccessor\Closure;
 use BCC\AutoMapperBundle\Tests\Fixtures\PostMap;
 use BCC\AutoMapperBundle\Mapper\FieldFilter\IfNull;
-use Fixtures\DestinationComplexAuthor;
 
 /**
  * @author Michel Salib <michelsalib@hotmail.com>
@@ -228,8 +227,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
         $mapper = new Mapper();
         $mapper->createMap('BCC\AutoMapperBundle\Tests\Fixtures\SourcePost', 'BCC\AutoMapperBundle\Tests\Fixtures\DestinationPost')
             ->route('author', 'author')
-            ->filter('author', new ObjectMappingFilter(DestinationAuthor::class));
-        $mapper->createMap(SourceAuthor::class, DestinationAuthor::class);
+            ->filter('author', new ObjectMappingFilter('BCC\AutoMapperBundle\Tests\Fixtures\DestinationAuthor'));
+        $mapper->createMap('BCC\AutoMapperBundle\Tests\Fixtures\SourceAuthor', 'BCC\AutoMapperBundle\Tests\Fixtures\DestinationAuthor');
 
         $mapper->map($source, $result = new DestinationPost());
 
@@ -250,8 +249,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
         $mapper = new Mapper();
         $mapper->createMap('BCC\AutoMapperBundle\Tests\Fixtures\SourcePost', 'BCC\AutoMapperBundle\Tests\Fixtures\DestinationPost')
             ->route('author', 'author')
-            ->filter('author', new ObjectMappingFilter(DestinationAuthor::class));
-        $mapper->createMap('array', DestinationAuthor::class);
+            ->filter('author', new ObjectMappingFilter('BCC\AutoMapperBundle\Tests\Fixtures\DestinationAuthor'));
+        $mapper->createMap('array', 'BCC\AutoMapperBundle\Tests\Fixtures\DestinationAuthor');
 
         $mapper->map($source, $result = new DestinationPost());
 
@@ -268,7 +267,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
 
         $source = new SourcePost();
         $source->description = 'Symfony2 developer';
-        $source->comments = [$sourceComment1, $sourceComment2];
+        $source->comments = array($sourceComment1, $sourceComment2);
 
         $destinationComment1 = new DestinationComment();
         $destinationComment1->content = 'content1';
@@ -278,13 +277,13 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
         
         $destination = new DestinationPost();
         $destination->description = 'Symfony2 developer';
-        $destination->comments = [$destinationComment1, $destinationComment2];
+        $destination->comments = array($destinationComment1, $destinationComment2);
 
         $mapper = new Mapper();
         $mapper->createMap('BCC\AutoMapperBundle\Tests\Fixtures\SourcePost', 'BCC\AutoMapperBundle\Tests\Fixtures\DestinationPost')
             ->route('comments', 'comments')
-            ->filter('comments', new ArrayObjectMappingFilter(DestinationComment::class));
-        $mapper->createMap(SourceComment::class, DestinationComment::class);
+            ->filter('comments', new ArrayObjectMappingFilter('BCC\AutoMapperBundle\Tests\Fixtures\DestinationComment'));
+        $mapper->createMap('BCC\AutoMapperBundle\Tests\Fixtures\SourceComment', 'BCC\AutoMapperBundle\Tests\Fixtures\DestinationComment');
 
         $mapper->map($source, $result = new DestinationPost());
 
@@ -301,7 +300,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
 
         $source = new PrivateSourcePost();
         $source->setDescription('Symfony2 developer');
-        $source->setComments([$sourceComment1, $sourceComment2]);
+        $source->setComments(array($sourceComment1, $sourceComment2));
 
         $destinationComment1 = new DestinationComment();
         $destinationComment1->content = 'content1';
@@ -311,13 +310,13 @@ class MapperTest extends \PHPUnit_Framework_TestCase {
 
         $destination = new DestinationPost();
         $destination->description = 'Symfony2 developer';
-        $destination->comments = [$destinationComment1, $destinationComment2];
+        $destination->comments = array($destinationComment1, $destinationComment2);
 
         $mapper = new Mapper();
         $mapper->createMap('BCC\AutoMapperBundle\Tests\Fixtures\PrivateSourcePost', 'BCC\AutoMapperBundle\Tests\Fixtures\DestinationPost')
             ->forMember('comments', new Expression('getComments()'))
-            ->filter('comments', new ArrayObjectMappingFilter(DestinationComment::class));
-        $mapper->createMap(SourceComment::class, DestinationComment::class);
+            ->filter('comments', new ArrayObjectMappingFilter('BCC\AutoMapperBundle\Tests\Fixtures\DestinationComment'));
+        $mapper->createMap('BCC\AutoMapperBundle\Tests\Fixtures\SourceComment', 'BCC\AutoMapperBundle\Tests\Fixtures\DestinationComment');
 
         $mapper->map($source, $result = new DestinationPost());
 
