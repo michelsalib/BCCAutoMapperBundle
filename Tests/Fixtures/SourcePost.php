@@ -10,6 +10,7 @@ class SourcePost {
     public $name;
     public $description;
     public $author;
+    public $comments;
 
 }
 

@@ -2,8 +2,8 @@
 
 namespace BCC\AutoMapperBundle\Mapper\FieldAccessor;
 
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
 /**
@@ -11,7 +11,7 @@ use Symfony\Component\PropertyAccess\PropertyPath;
  *
  * @author Michel Salib <michelsalib@hotmail.com>
  */
-class Simple implements FieldAccessorInterface
+class Expression implements FieldAccessorInterface
 {
 
     /**
@@ -20,7 +20,7 @@ class Simple implements FieldAccessorInterface
     private $sourcePropertyPath;
 
     /**
-     * @param string $sourcePropertyPath The property path
+     * @param string|\Symfony\Component\ExpressionLanguage\Expression $sourcePropertyPath The property path
      */
     function __construct($sourcePropertyPath)
     {
@@ -32,10 +32,12 @@ class Simple implements FieldAccessorInterface
      */
     public function getValue($source)
     {
+        $expLanguage = new ExpressionLanguage();
         try {
-            return PropertyAccess::createPropertyAccessor()->getValue($source, $this->sourcePropertyPath);
+            return $expLanguage->evaluate($this->sourcePropertyPath, $source);
         } catch (NoSuchPropertyException $ex) {
             // ignore properties not found
         }
     }
+
 }

@@ -2,6 +2,9 @@
 
 namespace BCC\AutoMapperBundle\Mapper;
 
+use BCC\AutoMapperBundle\Mapper\FieldAccessor\Simple;
+use BCC\AutoMapperBundle\Mapper\FieldFilter\AbstractMappingFilter;
+use Exception\InvalidClassConstructorException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
@@ -16,20 +19,20 @@ class Mapper
 
     /**
      * Creates and registers a default map given the source and destination types.
-     * 
+     *
      * @param string $sourceType
      * @param string $destinationMap
-     * @return DefaultMap 
+     * @return DefaultMap
      */
     public function createMap($sourceType, $destinationMap)
     {
         return $this->maps[$sourceType][$destinationMap] = new DefaultMap($sourceType, $destinationMap);
     }
-    
+
     /**
      * Registers a map to the mapper.
-     * 
-     * @param MapInterface $map 
+     *
+     * @param MapInterface $map
      */
     public function registerMap(MapInterface $map)
     {
@@ -38,7 +41,7 @@ class Mapper
 
     /**
      * Obtains a registered map for the given source and destination types.
-     * 
+     *
      * @param string $sourceType
      * @param string $destinationType
      * @return MapInterface
@@ -48,41 +51,56 @@ class Mapper
         if(!isset($this->maps[$sourceType])) {
             throw new \LogicException('There is no map that support this source type: '.$sourceType);
         }
-        
+
         if(!isset($this->maps[$sourceType][$destinationType])) {
             throw new \LogicException('There is no map that support this destination type: '.$destinationType);
         }
-        
+
         return $this->maps[$sourceType][$destinationType];
     }
 
     /**
      * Maps two object together, a map should exist.
-     * 
-     * @param mixed $source
-     * @param mixed $destination
-     * @return mixed The destination object
+     *
+     * @param $source
+     * @param $destination
+     *
+     * @return object
+     * @throws InvalidClassConstructorException
      */
     public function map($source, $destination)
     {
+        if (is_string($destination)) {
+            $destinationRef = new \ReflectionClass($destination);
+
+            if ($destinationRef->getConstructor() && $destinationRef->getConstructor()->getNumberOfRequiredParameters() > 0) {
+                throw new \BCC\AutoMapperBundle\Exception\InvalidClassConstructorException($destination);
+            }
+            $destination = $destinationRef->newInstance();
+        }
+
         $map = $this->getMap(
             $this->guessType($source),
             $this->guessType($destination)
         );
         $fieldAccessors = $map->getFieldAccessors();
         $fieldFilters = $map->getFieldFilters();
-        
+
         foreach ($fieldAccessors as $path => $fieldAccessor) {
             $value = $fieldAccessor->getValue($source);
-            
+
             if (isset($fieldFilters[$path])) {
-                $value = $fieldFilters[$path]->filter($value);
+                if (($filter = $fieldFilters[$path]) instanceof AbstractMappingFilter) {
+                    $filter->setMapper($this);
+                }
+
+                $value = $filter->filter($value);
             }
-            
+
             if ($map->getSkipNull() && is_null($value)) {
                 continue;
             }
-            
+
             $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
             if ($map->getOverwriteIfSet())
@@ -97,10 +115,10 @@ class Mapper
                 }
             }
         }
-        
+
         return $destination;
     }
-    
+
     private function guessType($guessable)
     {
         return \is_array($guessable) ? 'array' : $this->filterClassName(\get_class($guessable));
@@ -118,5 +136,25 @@ class Mapper
         }
 
         return $result;
+    }
+
+    /**
+     * @param $value
+     * @param $fieldAccessor
+     *
+     * @return object
+     * @throws InvalidClassConstructorException
+     */
+    private function applyDeepMapping($value, $fieldAccessor)
+    {
+        if (!is_null($value) && $fieldAccessor instanceof Simple && $fieldAccessor->getMappingClass()) {
+            if (is_array($value)) {
+                $value = $this->map($value, $fieldAccessor->getMappingClass());
+            } elseif (is_object($value)) {
+                $value = $this->map($value, $fieldAccessor->getMappingClass());
+            }
+        }
+
+        return $value;
     }
 }
