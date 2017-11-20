@@ -103,7 +103,7 @@ $destination = new DestinationPost();
 // map
 $mapper->map($source, $destination);
 
-echo destination->description; // outputs 'Symfony2 developer'
+echo $destination->description; // outputs 'Symfony2 developer'
 ```
 
 ### Route members
@@ -127,7 +127,7 @@ $destination = new DestinationPost();
 // map
 $mapper->map($source, $destination);
 
-echo destination->title; // outputs 'AutoMapper Bundle'
+echo $destination->title; // outputs 'AutoMapper Bundle'
 ```
 
 Note that if `title` or `name` is private, it will try to use getter and setter to route the member.
@@ -157,7 +157,7 @@ $destination = new DestinationPost();
 // map
 $mapper->map($source, $destination);
 
-echo destination->title; // outputs 'AUTOMAPPER BUNDLE'
+echo $destination->title; // outputs 'AUTOMAPPER BUNDLE'
 ```
 
 ### Map a graph
@@ -183,7 +183,7 @@ $mapper = new Mapper();
 // map
 $mapper->map($source, $destination);
 
-echo destination->author; // outputs 'Michel'
+echo $destination->author; // outputs 'Michel'
 ```
 
 Note that if there are private members, it will try to use getter and setter to route the member.
@@ -211,7 +211,7 @@ $destination = new DestinationPost();
 // map
 $mapper->map($source, $destination);
 
-echo destination->title; // outputs 'Constant title'
+echo $destination->title; // outputs 'Constant title'
 ```
 
 ### Apply a filter
@@ -237,7 +237,7 @@ $destination = new DestinationPost();
 // map
 $mapper->map($source, $destination);
 
-echo destination->title; // outputs 'Default title'
+echo $destination->title; // outputs 'Default title'
 ```
 
 ## Register a map
@@ -295,7 +295,7 @@ $destination = new DestinationPost();
 // map
 $mapper->map($source, $destination);
 
-echo destination->title; // outputs 'AutoMapper Bundle'
+echo $destination->title; // outputs 'AutoMapper Bundle'
 ```
 
 ## Ignore a field
@@ -319,7 +319,7 @@ $destination = new DestinationPost();
 // map
 $mapper->map($source, $destination);
 
-var_dump(destination->description); // ignored, will be null
+var_dump($destination->description); // ignored, will be null
 ```
 
 ## Do not overwrite already set field
@@ -344,7 +344,7 @@ $destination->description = 'Foo bar';
 // map
 $mapper->map($source, $destination);
 
-var_dump(destination->description); // will be 'Foo bar'
+var_dump($destination->description); // will be 'Foo bar'
 ```
 
 ## Skip null
@@ -369,5 +369,5 @@ $destination->description = 'Foo bar';
 // map
 $mapper->map($source, $destination);
 
-var_dump(destination->description); // will be 'Foo bar'
+var_dump($destination->description); // will be 'Foo bar'
 ```
