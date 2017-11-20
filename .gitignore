@@ -3,3 +3,7 @@ Tests/autoload.php
 
 vendor/*
 !vendor/vendors.php
+
+composer.lock
+
+.idea

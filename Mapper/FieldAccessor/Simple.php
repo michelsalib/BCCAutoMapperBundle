@@ -4,7 +4,6 @@ namespace BCC\AutoMapperBundle\Mapper\FieldAccessor;
 
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
 /**
@@ -21,7 +20,7 @@ class Simple implements FieldAccessorInterface
     private $sourcePropertyPath;
 
     /**
-     * @param $sourcePropertyPath The property path
+     * @param string $sourcePropertyPath The property path
      */
     function __construct($sourcePropertyPath)
     {
@@ -39,5 +38,4 @@ class Simple implements FieldAccessorInterface
             // ignore properties not found
         }
     }
-
 }

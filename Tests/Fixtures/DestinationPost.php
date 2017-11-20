@@ -10,5 +10,6 @@ class DestinationPost {
     public $title;
     public $description;
     public $author;
+    public $comments;
 
 }
