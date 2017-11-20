@@ -2,6 +2,8 @@
 
 namespace BCC\AutoMapperBundle\Mapper\FieldFilter;
 
+use Doctrine\Common\Collections\Collection;
+
 /**
  * Filter array object value and map inner items to given className
  *
@@ -19,6 +21,10 @@ class ArrayObjectMappingFilter extends AbstractMappingFilter
      */
     function filter($value)
     {
+        if ($value instanceof Collection) {
+            $value = $value->toArray();
+        }
+
         if (is_array($value)) {
             $objectFilter = new ObjectMappingFilter($this->className);
             $objectFilter->setMapper($this->getMapper());
